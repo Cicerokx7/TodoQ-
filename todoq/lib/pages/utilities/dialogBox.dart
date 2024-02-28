@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DialogBox extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final controller;
   VoidCallback saved;
 
@@ -28,13 +29,13 @@ class DialogBox extends StatelessWidget {
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
-                borderSide: BorderSide(color: Colors.black, width: 2),
+                borderSide: const BorderSide(color: Colors.black, width: 2),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(24),
-                borderSide: BorderSide(color: Colors.black, width: 2),
+                borderSide: const BorderSide(color: Colors.black, width: 2),
               ),
-              hintText: "Title",
+              hintText: "Todo",
             ),
             cursorColor: Colors.black,
           ),

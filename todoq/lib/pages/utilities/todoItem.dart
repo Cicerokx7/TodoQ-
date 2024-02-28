@@ -7,6 +7,8 @@ class ToDoItem extends StatelessWidget {
   Function(bool?)? onChanged;
   final bool isTop;
   Function(BuildContext)? delete;
+  Function(BuildContext)? moveUp;
+  Function(BuildContext)? moveDown;
 
   ToDoItem({
     Key? key,
@@ -15,6 +17,8 @@ class ToDoItem extends StatelessWidget {
     required this.onChanged,
     required this.isTop,
     required this.delete,
+    required this.moveUp,
+    required this.moveDown,
   }) : super(key: key);
 
   @override
@@ -24,12 +28,13 @@ class ToDoItem extends StatelessWidget {
       itemColor = Colors.green;
     }
     if (itemCompleted) {
-      itemColor = const Color.fromRGBO(
-        184,
-        148,
-        7,
-        1,
-      );
+      // itemColor = const Color.fromRGBO(
+      //   184,
+      //   148,
+      //   7,
+      //   1,
+      // );
+      itemColor = Colors.purple[500];
     }
 
     return Padding(
@@ -42,15 +47,16 @@ class ToDoItem extends StatelessWidget {
               Expanded(child: Divider(color: Colors.grey[500], thickness: 3)),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text("Next to Complete",
+                child: Text("Next Todo",
                     style: TextStyle(
                         fontFamily: 'BookAntiqua',
-                        color: Color.fromRGBO(
-                          184,
-                          148,
-                          7,
-                          1,
-                        ),
+                        // color: Color.fromRGBO(
+                        //   184,
+                        //   148,
+                        //   7,
+                        //   1,
+                        // ),
+                        color: Colors.grey,
                         fontSize: 24)),
               ),
               Expanded(child: Divider(color: Colors.grey[500], thickness: 3))
@@ -61,6 +67,18 @@ class ToDoItem extends StatelessWidget {
           endActionPane: ActionPane(
             motion: const StretchMotion(),
             children: [
+              SlidableAction(
+                onPressed: moveUp,
+                icon: Icons.keyboard_arrow_up_rounded,
+                backgroundColor: Colors.yellow,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              SlidableAction(
+                onPressed: moveDown,
+                icon: Icons.keyboard_arrow_down_rounded,
+                backgroundColor: Colors.yellow,
+                borderRadius: BorderRadius.circular(24),
+              ),
               SlidableAction(
                 onPressed: delete,
                 icon: Icons.close,
@@ -110,9 +128,7 @@ class ToDoItem extends StatelessWidget {
           visible: isTop,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Expanded(
-              child: Divider(color: Colors.grey[500], thickness: 3),
-            ),
+            child: Divider(color: Colors.grey[500], thickness: 3),
           ),
         ),
       ]),

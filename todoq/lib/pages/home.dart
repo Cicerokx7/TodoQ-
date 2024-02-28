@@ -17,11 +17,11 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // if (box.get("QUEUE") == null) {
-    //   data.createInitialData();
-    // } else {
-    data.load();
-    // }
+    if (box.get("QUEUE") == null) {
+      data.createInitialData();
+    } else {
+      data.load();
+    }
     super.initState();
   }
 
@@ -59,6 +59,28 @@ class _MyHomePageState extends State<HomePage> {
     data.update();
   }
 
+  void moveUp(int index) {
+    if (index > 0) {
+      setState(() {
+        List temp = data.toDoQueue[index];
+        data.toDoQueue[index] = data.toDoQueue[index - 1];
+        data.toDoQueue[index - 1] = temp;
+      });
+    }
+    data.update();
+  }
+
+  void moveDown(int index) {
+    if (index < data.toDoQueue.length - 1) {
+      setState(() {
+        List temp = data.toDoQueue[index];
+        data.toDoQueue[index] = data.toDoQueue[index + 1];
+        data.toDoQueue[index + 1] = temp;
+      });
+    }
+    data.update();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isTop = true;
@@ -80,19 +102,17 @@ class _MyHomePageState extends State<HomePage> {
         elevation: 0,
         backgroundColor: Colors.black,
       ),
-      floatingActionButton: Align(
-        alignment: Alignment.bottomCenter,
-        child: FloatingActionButton(
-          backgroundColor: Colors.purple[500],
-          onPressed: enqueue,
-          elevation: 0,
-          child: const Icon(
-            Icons.add_rounded,
-            size: 50,
-            color: Colors.black,
-          ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple[500],
+        onPressed: enqueue,
+        elevation: 0,
+        child: const Icon(
+          Icons.add_rounded,
+          size: 50,
+          color: Colors.black,
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Column(
         children: [
           Expanded(
@@ -102,27 +122,6 @@ class _MyHomePageState extends State<HomePage> {
                 if (topNotFound && data.toDoQueue[index][1] == false) {
                   isTop = true;
                   topNotFound = false;
-                  Row(
-                    children: [
-                      Expanded(
-                          child:
-                              Divider(color: Colors.grey[500], thickness: 3)),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text("Or Sign In Using",
-                            style: TextStyle(
-                                color: Color.fromRGBO(
-                                  184,
-                                  148,
-                                  7,
-                                  1,
-                                ),
-                                fontSize: 20)),
-                      ),
-                      Expanded(
-                          child: Divider(color: Colors.grey[500], thickness: 3))
-                    ],
-                  );
                 } else {
                   isTop = false;
                 }
@@ -132,6 +131,8 @@ class _MyHomePageState extends State<HomePage> {
                   onChanged: (val) => checkBoxChanged(val, index),
                   isTop: isTop,
                   delete: (context) => delete(index),
+                  moveUp: (context) => moveUp(index),
+                  moveDown: (context) => moveDown(index),
                 );
               },
             ),
