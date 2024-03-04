@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 void main() async {
   await Hive.initFlutter();
 
+  //Retrieve the phone's database
   var box = await Hive.openBox("phoneBox");
 
   runApp(const MyApp());

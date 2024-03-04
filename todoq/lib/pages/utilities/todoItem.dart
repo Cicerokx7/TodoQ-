@@ -1,13 +1,22 @@
+//This is the class to display a to-do item.
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ToDoItem extends StatelessWidget {
+  // This is the name of the item.
   final String itemName;
+  // This is if the checkBox is checked or not.
   final bool itemCompleted;
+  // This is used to indicated if the state of the checkBox has been changed.
   Function(bool?)? onChanged;
+  // This is if the item is at the top of the queue
   final bool isTop;
+  // This is used to indicate if the item should be deleted.
   Function(BuildContext)? delete;
+  // This is used to indicate if the item should move up.
   Function(BuildContext)? moveUp;
+  // This is used to indicate if the item should move down.
   Function(BuildContext)? moveDown;
 
   ToDoItem({
@@ -23,23 +32,21 @@ class ToDoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // If the item is not at the top of the queue and the item is not completed then set it to blue.
     Color? itemColor = Colors.blue[400];
+    // If the item is at the top of the queue and the item is not completed then set it to purple.
     if (isTop) {
       itemColor = Colors.green;
     }
+    // If the item is completed set it to purple.
     if (itemCompleted) {
-      // itemColor = const Color.fromRGBO(
-      //   184,
-      //   148,
-      //   7,
-      //   1,
-      // );
-      itemColor = Colors.purple[500];
+      itemColor = Colors.purple;
     }
 
     return Padding(
       padding: const EdgeInsets.all(25.0),
       child: Column(children: [
+        //If the item is the top of the queue the put a bar and text above the item to indicate this is the top of the queue.
         Visibility(
           visible: isTop,
           child: Row(
@@ -50,12 +57,6 @@ class ToDoItem extends StatelessWidget {
                 child: Text("Next Todo",
                     style: TextStyle(
                         fontFamily: 'BookAntiqua',
-                        // color: Color.fromRGBO(
-                        //   184,
-                        //   148,
-                        //   7,
-                        //   1,
-                        // ),
                         color: Colors.grey,
                         fontSize: 24)),
               ),
@@ -64,7 +65,8 @@ class ToDoItem extends StatelessWidget {
           ),
         ),
         Slidable(
-          endActionPane: ActionPane(
+          //If the item is slid to the right diplay the moveUp and moveDown buttons on the left.
+          startActionPane: ActionPane(
             motion: const StretchMotion(),
             children: [
               SlidableAction(
@@ -79,6 +81,12 @@ class ToDoItem extends StatelessWidget {
                 backgroundColor: Colors.yellow,
                 borderRadius: BorderRadius.circular(24),
               ),
+            ],
+          ),
+          // If the item is slid to the left display the delete button on the right.
+          endActionPane: ActionPane(
+            motion: const StretchMotion(),
+            children: [
               SlidableAction(
                 onPressed: delete,
                 icon: Icons.close,
@@ -97,6 +105,7 @@ class ToDoItem extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       itemName,
+                      // If the item's name goes out of bounds wrap around and extend the size of the item.
                       softWrap: true,
                       maxLines: null,
                       overflow: TextOverflow.clip,
@@ -104,6 +113,7 @@ class ToDoItem extends StatelessWidget {
                           fontSize: 18,
                           color: Colors.black,
                           fontFamily: 'BookAntiqua',
+                          // If item is completed display the box as checked and put a line through the name of the item.
                           decoration: itemCompleted
                               ? TextDecoration.lineThrough
                               : TextDecoration.none),
@@ -124,6 +134,7 @@ class ToDoItem extends StatelessWidget {
             ),
           ),
         ),
+        // If the item is the top of the queue then put a line across the bottom of the item to indicate that it is the top.
         Visibility(
           visible: isTop,
           child: Padding(

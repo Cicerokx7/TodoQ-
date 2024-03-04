@@ -1,3 +1,5 @@
+//This class is used to create a new item.
+
 import 'package:flutter/material.dart';
 
 class DialogBox extends StatelessWidget {
@@ -13,6 +15,7 @@ class DialogBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Display a box in front of the home page.
     return AlertDialog(
       backgroundColor: Colors.blue[400],
       content: Container(
