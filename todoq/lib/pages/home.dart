@@ -1,10 +1,13 @@
 //This is the main page where the to-do queue is shown.
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoq/data/dataBase.dart';
 import 'package:todoq/pages/utilities/dialogBox.dart';
 import 'package:todoq/pages/utilities/todoItem.dart';
+
+import 'utilities/editBox.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -53,6 +56,15 @@ class _MyHomePageState extends State<HomePage> {
     data.update();
   }
 
+  void editSave(int index) {
+    setState(() {
+      data.toDoQueue[index][0] = controller.text;
+    });
+    controller.clear();
+    Navigator.of(context).pop();
+    data.update();
+  }
+
   //This runs when the floating plus button has been pressed to open the dialog box
   void enqueue() {
     showDialog(
@@ -72,26 +84,29 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   //This runs when the move up button has been pressed and then it moves the item up in the queue.
-  void moveUp(int index) {
-    if (index > 0) {
-      setState(() {
-        List temp = data.toDoQueue[index];
-        data.toDoQueue[index] = data.toDoQueue[index - 1];
-        data.toDoQueue[index - 1] = temp;
-      });
-    }
-    data.update();
+  void edit(int index, String title) {
+    controller.text = title;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return EditBox(
+          controller: controller,
+          saved: () {
+            editSave(index);
+          },
+        );
+      },
+    );
   }
 
-  //This runs when the move down button has been pressed and then it moves the item down in the queue.
-  void moveDown(int index) {
-    if (index < data.toDoQueue.length - 1) {
-      setState(() {
-        List temp = data.toDoQueue[index];
-        data.toDoQueue[index] = data.toDoQueue[index + 1];
-        data.toDoQueue[index + 1] = temp;
-      });
+  void updateItemOrder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex = newIndex - 1;
     }
+    setState(() {
+      final item = data.toDoQueue.removeAt(oldIndex);
+      data.toDoQueue.insert(newIndex, item);
+    });
     data.update();
   }
 
@@ -139,33 +154,32 @@ class _MyHomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       //This is the queue of tasks displayed as a column
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: data.toDoQueue.length,
-              itemBuilder: (context, index) {
-                //If the top of the queue has not been found and this item is not completed then it must be the top of the queue
-                if (topNotFound && data.toDoQueue[index][1] == false) {
-                  isTop = true;
-                  topNotFound = false;
-                } else {
-                  isTop = false;
-                }
-                // Display the item.
-                return ToDoItem(
-                  itemName: data.toDoQueue[index][0],
-                  itemCompleted: data.toDoQueue[index][1],
-                  onChanged: (val) => checkBoxChanged(val, index),
-                  isTop: isTop,
-                  delete: (context) => delete(index),
-                  moveUp: (context) => moveUp(index),
-                  moveDown: (context) => moveDown(index),
-                );
-              },
+      body: ReorderableListView.builder(
+        buildDefaultDragHandles: false,
+        itemCount: data.toDoQueue.length,
+        itemBuilder: (context, index) {
+          //If the top of the queue has not been found and this item is not completed then it must be the top of the queue
+          if (index == data.top) {
+            isTop = true;
+          } else {
+            isTop = false;
+          }
+          // Display the item.
+          return ReorderableDelayedDragStartListener(
+            key: Key('$index'),
+            index: index,
+            child: ToDoItem(
+              // key: Key('$index'),
+              itemName: data.toDoQueue[index][0],
+              itemCompleted: data.toDoQueue[index][1],
+              onChanged: (val) => checkBoxChanged(val, index),
+              isTop: isTop,
+              delete: (context) => delete(index),
+              edit: (context) => edit(index, data.toDoQueue[index][0]),
             ),
-          ),
-        ],
+          );
+        },
+        onReorder: (oldIndex, newIndex) => updateItemOrder(oldIndex, newIndex),
       ),
     );
   }
