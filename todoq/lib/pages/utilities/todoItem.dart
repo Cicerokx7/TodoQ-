@@ -14,7 +14,7 @@ class ToDoItem extends StatelessWidget {
   final bool isTop;
   // This is used to indicate if the item should be deleted.
   Function(BuildContext)? delete;
-  // This is used to indicate if the item should move up.
+  // This is used to indicate if the item should be edited.
   Function(BuildContext)? edit;
 
   ToDoItem({
@@ -64,7 +64,7 @@ class ToDoItem extends StatelessWidget {
             ),
           ),
           Slidable(
-            //If the item is slid to the right diplay the moveUp and moveDown buttons on the left.
+            //If the item is slid to the right diplay the edit button.
             startActionPane: ActionPane(
               motion: const StretchMotion(),
               children: [

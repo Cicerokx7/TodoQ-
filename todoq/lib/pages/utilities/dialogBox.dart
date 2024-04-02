@@ -1,15 +1,17 @@
-//This class is used to create a new item.
+//This class is used to create a new item or queue.
 
 import 'package:flutter/material.dart';
 
 class DialogBox extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final controller;
+  final String hintText;
   VoidCallback saved;
 
   DialogBox({
     super.key,
     required this.controller,
+    required this.hintText,
     required this.saved,
   });
 
@@ -38,7 +40,7 @@ class DialogBox extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 borderSide: const BorderSide(color: Colors.black, width: 2),
               ),
-              hintText: "Todo",
+              hintText: hintText,
             ),
             cursorColor: Colors.black,
           ),

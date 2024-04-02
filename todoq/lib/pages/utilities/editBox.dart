@@ -1,18 +1,18 @@
-//This class is used to create a new item.
+//This class is used to edit an item or class.
 
 import 'package:flutter/material.dart';
 
 class EditBox extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final controller;
-  // final String title;
   VoidCallback? saved;
+  final String hintText;
 
   EditBox({
     super.key,
     required this.controller,
-    // required this.title,
     required this.saved,
+    required this.hintText,
   });
 
   @override
@@ -40,7 +40,7 @@ class EditBox extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 borderSide: const BorderSide(color: Colors.black, width: 2),
               ),
-              hintText: "Todo",
+              hintText: hintText,
             ),
             cursorColor: Colors.black,
           ),
