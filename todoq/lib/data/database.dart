@@ -22,36 +22,32 @@ class QueueDataBase {
   void load() {
     toDoQueue = box.get("QUEUES");
     queue = box.get("QUEUE");
-    top = -1;
-    //This will identify the top of the queue. This will only run if there is a queue.
-    if (queue != -1) {
-      for (int i = 0; i < toDoQueue[queue][1].length; i++) {
-        if (toDoQueue[queue][1][i][1] == false) {
-          top = i;
-          i = toDoQueue[queue][1].length;
-        }
-      }
-    }
+    updateTop();
   }
 
   //This store the new toDoQueue data to the phones database.
   void update() {
     box.put("QUEUES", toDoQueue);
-    top = -1;
-    //This will identify the top of the queue. This will only run if there is a queue.
-    if (queue != -1) {
-      for (int i = 0; i < toDoQueue[queue][1].length; i++) {
-        if (toDoQueue[queue][1][i][1] == false) {
-          top = i;
-          i = toDoQueue[queue][1].length;
-        }
-      }
-    }
+    updateTop();
   }
 
   //This will store the new data for the queue index to the phones database.
   void updateQueue(int q) {
     queue = q;
     box.put("QUEUE", queue);
+    updateTop();
+  }
+
+  //This will identify the top of the queue. This will only run if there is a queue.
+  void updateTop() {
+    top = -1;
+    if (queue != -1) {
+      for (int i = 0; i < toDoQueue[queue][1].length; i++) {
+        if (toDoQueue[queue][1][i][1] == false) {
+          top = i;
+          i = toDoQueue[queue][1].length;
+        }
+      }
+    }
   }
 }

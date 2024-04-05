@@ -285,7 +285,7 @@ class _MyHomePageState extends State<HomePage> {
       body: (queueIndex != -1)
           ? ReorderableListView.builder(
               buildDefaultDragHandles: false,
-              itemCount: data.toDoQueue[queueIndex][1].length,
+              itemCount: data.toDoQueue[queueIndex][1].length + 1,
               itemBuilder: (context, index) {
                 //If the top of the queue has not been found and this item is not completed then it must be the top of the queue
                 if (index == data.top) {
@@ -294,19 +294,22 @@ class _MyHomePageState extends State<HomePage> {
                   isTop = false;
                 }
                 // Display the item.
-                return ReorderableDelayedDragStartListener(
-                  key: Key('$index'),
-                  index: index,
-                  child: ToDoItem(
-                    itemName: data.toDoQueue[queueIndex][1][index][0],
-                    itemCompleted: data.toDoQueue[queueIndex][1][index][1],
-                    onChanged: (val) => checkBoxChanged(val, index),
-                    isTop: isTop,
-                    delete: (context) => delete(index),
-                    edit: (context) =>
-                        edit(index, data.toDoQueue[queueIndex][1][index][0]),
-                  ),
-                );
+                return (index == data.toDoQueue[queueIndex][1].length)
+                    ? Container(key: Key('$index'), height: 70)
+                    : ReorderableDelayedDragStartListener(
+                        key: Key('$index'),
+                        index: index,
+                        child: ToDoItem(
+                          itemName: data.toDoQueue[queueIndex][1][index][0],
+                          itemCompleted: data.toDoQueue[queueIndex][1][index]
+                              [1],
+                          onChanged: (val) => checkBoxChanged(val, index),
+                          isTop: isTop,
+                          delete: (context) => delete(index),
+                          edit: (context) => edit(
+                              index, data.toDoQueue[queueIndex][1][index][0]),
+                        ),
+                      );
               },
               onReorder: (oldIndex, newIndex) =>
                   updateItemOrder(oldIndex, newIndex),
