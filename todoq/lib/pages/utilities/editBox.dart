@@ -26,24 +26,26 @@ class EditBox extends StatelessWidget {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           TextField(
-            controller: controller,
-            style: const TextStyle(
-              fontFamily: 'BookAntiqua',
-              color: Colors.black,
-            ),
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Colors.black, width: 2),
+              controller: controller,
+              style: const TextStyle(
+                fontFamily: 'BookAntiqua',
+                color: Colors.black,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(24),
-                borderSide: const BorderSide(color: Colors.black, width: 2),
+              decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: const BorderSide(color: Colors.black, width: 2),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24),
+                  borderSide: const BorderSide(color: Colors.black, width: 2),
+                ),
+                hintText: hintText,
               ),
-              hintText: hintText,
-            ),
-            cursorColor: Colors.black,
-          ),
+              cursorColor: Colors.black,
+              onSubmitted: (String value) {
+                saved!();
+              }),
           MaterialButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),

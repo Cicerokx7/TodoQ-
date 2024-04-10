@@ -338,7 +338,7 @@ class _MyHomePageState extends State<HomePage> {
               ),
             ),
             Divider(
-              color: Colors.grey[800],
+              color: Colors.grey[700],
             ),
             Expanded(
               //It will display a list of the queues if there are queues to display.
