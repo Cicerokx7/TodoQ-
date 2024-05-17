@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+// ignore: must_be_immutable
 class Queue extends StatelessWidget {
   // This is the name of the queue.
   final String queueName;

@@ -1,6 +1,5 @@
 //This is the main page where the to-do queue is shown.
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todoq/data/dataBase.dart';
@@ -228,7 +227,6 @@ class _MyHomePageState extends State<HomePage> {
     //This var is used to determine if an item is next uncomplete item in the queue.
     bool isTop = true;
     //This var is used to determine if the top of the queue has been found.
-    bool topNotFound = true;
     return Scaffold(
       backgroundColor: Colors.black,
       //This will show the name of the app and the logo at the top of the app.
@@ -246,23 +244,26 @@ class _MyHomePageState extends State<HomePage> {
             );
           },
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Todo",
-              style: TextStyle(
-                color: Colors.purple,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'BookAntiqua',
+        title: Padding(
+          padding: const EdgeInsets.only(right: 50),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Todo",
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'BookAntiqua',
+                ),
               ),
-            ),
-            Image.asset(
-              'lib/images/iconTransparent2ForApp.png',
-              height: 72,
-            ),
-          ],
+              Image.asset(
+                'lib/images/iconTransparent2ForApp.png',
+                height: 72,
+              ),
+            ],
+          ),
         ),
         elevation: 0,
         backgroundColor: Colors.black,
@@ -327,77 +328,79 @@ class _MyHomePageState extends State<HomePage> {
       // This is a drawer to select and add queues.
       drawer: Drawer(
         backgroundColor: Colors.grey[900],
-        child: Column(
-          children: [
-            Text(
-              "Queues",
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: 'BookAntiqua',
-                color: Colors.white,
-              ),
-            ),
-            Divider(
-              color: Colors.grey[700],
-            ),
-            Expanded(
-              //It will display a list of the queues if there are queues to display.
-              child: (queueIndex != -1)
-                  ? ReorderableListView.builder(
-                      buildDefaultDragHandles: false,
-                      itemCount: data.toDoQueue.length,
-                      itemBuilder: (context, index) {
-                        bool selectedQueue = false;
-                        if (index == queueIndex) {
-                          selectedQueue = true;
-                        }
-                        //If a queue has been selected it will be set as the main queue.
-                        return GestureDetector(
-                          onTap: () => changeQueue(index),
-                          key: Key('$index'),
-                          child: ReorderableDelayedDragStartListener(
-                            index: index,
-                            child: Queue(
-                                selectedQueue: selectedQueue,
-                                queueName: data.toDoQueue[index][0],
-                                delete: (context) => deleteQueueConfirm(index),
-                                edit: (context) =>
-                                    editQueue(index, data.toDoQueue[index][0])),
-                          ),
-                        );
-                      },
-                      onReorder: (oldIndex, newIndex) =>
-                          updateQueueOrder(oldIndex, newIndex),
-                    )
-                  :
-                  //If there are no queues the following will be displayed.
-                  Center(
-                      child: Text(
-                        "Add a new queue",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'BookAntiqua',
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-            ),
-            //This is the add button to add a new queue.
-            MaterialButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(24)),
-              onPressed: newQueue,
-              color: Colors.purple[500],
-              child: const Text(
-                "Add",
+        child: SafeArea(
+          child: Column(
+            children: [
+              Text(
+                "Queues",
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: 'BookAntiqua',
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               ),
-            )
-          ],
+              Divider(
+                color: Colors.grey[700],
+              ),
+              Expanded(
+                //It will display a list of the queues if there are queues to display.
+                child: (queueIndex != -1)
+                    ? ReorderableListView.builder(
+                        buildDefaultDragHandles: false,
+                        itemCount: data.toDoQueue.length,
+                        itemBuilder: (context, index) {
+                          bool selectedQueue = false;
+                          if (index == queueIndex) {
+                            selectedQueue = true;
+                          }
+                          //If a queue has been selected it will be set as the main queue.
+                          return GestureDetector(
+                            onTap: () => changeQueue(index),
+                            key: Key('$index'),
+                            child: ReorderableDelayedDragStartListener(
+                              index: index,
+                              child: Queue(
+                                  selectedQueue: selectedQueue,
+                                  queueName: data.toDoQueue[index][0],
+                                  delete: (context) => deleteQueueConfirm(index),
+                                  edit: (context) =>
+                                      editQueue(index, data.toDoQueue[index][0])),
+                            ),
+                          );
+                        },
+                        onReorder: (oldIndex, newIndex) =>
+                            updateQueueOrder(oldIndex, newIndex),
+                      )
+                    :
+                    //If there are no queues the following will be displayed.
+                    Center(
+                        child: Text(
+                          "Add a new queue",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'BookAntiqua',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+              ),
+              //This is the add button to add a new queue.
+              MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24)),
+                onPressed: newQueue,
+                color: Colors.purple[500],
+                child: const Text(
+                  "Add",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'BookAntiqua',
+                    color: Colors.black,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
