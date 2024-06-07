@@ -27,6 +27,7 @@ class EditBox extends StatelessWidget {
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           TextField(
+            autofocus: true,
               controller: controller,
               style: const TextStyle(
                 fontFamily: 'BookAntiqua',
